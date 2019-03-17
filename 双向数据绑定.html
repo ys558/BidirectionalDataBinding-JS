@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>js实现双向数据绑定</title>
+</head>
+<body>
+<script>
+    // 基础原理：
+    window.obj = Object.defineProperty({}, 'name', {
+        set: function(val) {
+            name = val;
+            console.log(val);
+        },
+        get: function(val) {
+            console.log("name:" + name);
+        }
+    });
+</script>
+<!-- 实例： -->
+<input type="text" name="title" id="input"><br>
+输入的值<span id="con"></span>
+<script>
+    (function(){
+        var el = document.querySelector('#input');
+        var con = document.querySelector('#con');
+        window.obj = Object.defineProperty({}, 'name', {
+            set: function(val) {
+                name = val;
+                if(con.innerText != name) con.innerText = name;
+                console.log(val);
+            },
+            get: function(val) {
+                console.log("name:" + name);
+            }
+        });
+        if (!-[1,]) { //判断ie8及以下版本，因为ie8以下不支持oninput事件
+            el.onpropertychange = function() {
+                obj.name = this.value;
+            }
+        }else{
+            el.oninput = function() {
+                obj.name = this.value;
+            }
+        }
+    }())
+</script>
+</body>
+</html>
